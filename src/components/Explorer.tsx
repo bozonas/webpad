@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 function Explorer() {
   const classes = useStyles();
   const isAuthenticated = useSelector(selectAuth);
-  const [files, setFiles] = useState<string[]>([]);
+  const [files, setFiles] = useState<string[] | undefined>();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -35,6 +35,22 @@ function Explorer() {
 
   }, [isAuthenticated]);
 
+  let createFileList = () => {
+    if (files === undefined) {
+      return ("Loading...");
+    }
+    if (files.length == 0) {
+      return ("Folder is empty...");
+    }
+
+    return (files.map((fileName, index) => 
+    <ListItem key={index}>
+      <ListItemText
+        primary={fileName}
+      />
+    </ListItem>));
+  };
+
   return (
     <div className={classes.root}>
       <Paper variant="outlined" square >
@@ -44,14 +60,7 @@ function Explorer() {
           </Typography>
         </div>
         <List dense>
-          {files.length !== 0 ? 
-          files.map((fileName) => 
-            <ListItem>
-              <ListItemText
-                primary={fileName}
-              />
-            </ListItem>)
-          : "Loading..."}
+            {createFileList()}
         </List>
       </Paper>
     </div>
