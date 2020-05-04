@@ -1,28 +1,37 @@
 import { createSlice, Dispatch } from '@reduxjs/toolkit';
 import { RootState } from '../root-reducer';
+import { setInitDataAsync } from './googleDrive';
 
-type SliceState = { isAuthenticated: boolean };
+type SliceState = { 
+  isAuthenticated: boolean,
+ };
 
-const initialState: SliceState = { isAuthenticated:  false};
+const initialState: SliceState = {
+  isAuthenticated: false,
+};
 
-export const counterSlice = createSlice({
-  name: 'counter',
+export const authenticationSlice = createSlice({
+  name: 'authentication',
   initialState,
   reducers: {
-    logIn: (state, action) => {
-      console.log("setting global state to True");
-      console.log(`${action.payload}`);
+    logIn: (state) => {
       state.isAuthenticated = true;
     },
+    setRootFolder: (state, action) => {
+    },
     logOut: state => {
-      console.log("setting global state to True");
       state.isAuthenticated = false;
     }
   },
 });
 
-export const { logIn, logOut } = counterSlice.actions;
+export const logInAsync = () => (dispatch: Dispatch) => {
+  dispatch(logIn());
+  dispatch<any>(setInitDataAsync());
+};
+
+export const { logIn, setRootFolder, logOut } = authenticationSlice.actions;
 
 export const selectAuth = (state: RootState) => state.authentication.isAuthenticated;
 
-export default counterSlice.reducer;
+export default authenticationSlice.reducer;

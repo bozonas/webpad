@@ -10,12 +10,6 @@ const GoogleLogin = ({
 } : GoogleLoginType) => {
   const [loaded, setLoaded] = useState(false)
 
-  // function handleSigninSuccess(res: gapi.auth2.GoogleUser) {
-  //   const basicProfile = res.getBasicProfile()
-  //   const authResponse = res.getAuthResponse()
-  //   onSuccess(res)
-  // }
-
   function signIn() {
     if (loaded) {
       const auth2 = window.gapi.auth2.getAuthInstance()
@@ -39,9 +33,12 @@ const GoogleLogin = ({
 
   useEffect(() => {
     if (autoLoad) {
-      signIn()
+      if (loaded) {
+        const auth2 = window.gapi.auth2.getAuthInstance()
+          auth2.signIn().then(res => onSuccess(res), err => onFailure(err));
+      }
     }
-  }, [loaded]);
+  }, [loaded, autoLoad, onFailure, onSuccess]);
 
   function initClient() {
     window.gapi.load('client:auth2', () => {

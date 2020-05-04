@@ -1,11 +1,14 @@
 
 import React from 'react';
+import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import Grid from '@material-ui/core/Grid';
 import Explorer from './Explorer';
 import GoogleLoginButton from './google-authorization/GoogleLoginButton';
 
@@ -13,15 +16,72 @@ export interface LayoutProps {
   children: React.ReactNode
 }
 
+const drawerWidth = 240;
+
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+    height: "100%",
+    position: "fixed",
+    width: "100%",
+  },
+  rootGrid: {
+    height: "100vh",
+  },
+  toolbar: {
+    paddingRight: 24, // keep right padding when drawer closed
+  },
+  toolbarIcon: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: '0 8px',
+    ...theme.mixins.toolbar,
+  },
+  appBarShift: {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginRight: 36,
+  },
+  menuButtonHidden: {
+    display: 'none',
   },
   title: {
     flexGrow: 1,
+  },
+  drawerPaperClose: {
+    overflowX: 'hidden',
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    width: theme.spacing(7),
+    [theme.breakpoints.up('sm')]: {
+      width: theme.spacing(9),
+    },
+  },
+  appBarSpacer: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    overflow: 'auto',
+  },
+  container: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+  },
+  paper: {
+    padding: theme.spacing(2),
+    display: 'flex',
+    overflow: 'auto',
+    flexDirection: 'column',
+  },
+  fixedHeight: {
+    height: 240,
   },
 }));
 
@@ -30,25 +90,36 @@ function Layout(props: LayoutProps) {
 
   return (
     <>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+      <CssBaseline />
+      <AppBar position="static" >
+        <Toolbar className={classes.toolbar}>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            className={clsx(classes.menuButton, classes.menuButtonHidden)}
+          >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            News
+          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+            Dashboard
           </Typography>
-          <GoogleLoginButton
-            // onSuccess={() => {
-            //   console.log('success');
-            //   // GoogleDriveService.listFiles();
-            // }}
-            // onFailure={() => { console.log('failure') }}
-          />
+          <GoogleLoginButton />
         </Toolbar>
       </AppBar>
-      <Explorer />
-      {props.children}
+      <div className={classes.root} >
+        <Grid container spacing={0} className={classes.rootGrid}>
+          <Grid item xs={2}>
+            <Explorer />
+          </Grid>
+          <Grid item>
+            <main className={classes.content}>
+              {/* <div className={classes.appBarSpacer} /> */}
+              {props.children}
+            </main>
+          </Grid>
+        </Grid>
+      </div>
     </>
   );
 }

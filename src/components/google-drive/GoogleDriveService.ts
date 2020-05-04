@@ -2,14 +2,15 @@ const rootFolderName = "WebPad";
 
 export class GoogleDriveService {
 
-  async listFiles() : Promise<string[] | undefined> {
-    let rootFolderId = await this.getRootFolder();
+  async listFiles(rootFolderId: string) : Promise<string[] | undefined> {
     var response = await gapi.client.drive.files.list({
       "pageSize": 10,
       "fields": "nextPageToken, files(id, name)",
-      "q": `'${rootFolderId}' in parents`
+      "q": `'${rootFolderId}' in parents and trashed = false`
     });
     var files = response.result.files || [];
+    // console.log("got these files");
+    // console.log(files);
     var result = files.map(file => file.name || "");
     return result;
   }
@@ -20,7 +21,7 @@ export class GoogleDriveService {
       "q": `name='${rootFolderName}' and mimeType='application/vnd.google-apps.folder'`
     });
 
-    if (response.result.files?.length == 0) {
+    if (response.result.files?.length === 0) {
       let folderMetadata = {
         name: rootFolderName,
         mimeType: "application/vnd.google-apps.folder",
@@ -34,6 +35,19 @@ export class GoogleDriveService {
     } else {
       return response.result.files![0].id;
     }
+  }
+
+  async createFile(rootFolderId: string, fileName: string) : Promise<string | undefined> {
+    let folderMetadata = {
+      name: fileName,
+      mimeType: "text/plain",
+      parents: [rootFolderId]
+    }
+    var response = await gapi.client.drive.files.create({
+        resource: folderMetadata,
+        fields: "id"
+    });
+    return response.result.id;
   }
 };
 

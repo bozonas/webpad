@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import useGoogleLogin from './GoogleLogin';
 import Icon from './GoogleIcon';
-import {
-  logIn,
-  logOut
-} from '../../store/reducers/authentication';
+import { logOut, logInAsync } from '../../store/reducers/authentication';
 
 const GoogleLoginButton = (props: any) => {
   const dispatch = useDispatch();
@@ -19,7 +16,7 @@ const GoogleLoginButton = (props: any) => {
   } = props;
 
   let onSuccess = (user: gapi.auth2.GoogleUser) => 
-    dispatch(logIn(user.getBasicProfile().getName()));
+    dispatch(logInAsync());
 
   const { signIn, loaded } = useGoogleLogin({
     onSuccess: onSuccess,

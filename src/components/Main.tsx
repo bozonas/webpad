@@ -1,13 +1,11 @@
 import React from 'react';
-import GoogleLoginButton from './google-authorization/GoogleLoginButton';
-import GoogleDriveService from './google-drive/GoogleDriveService';
 
 function Main() {
   return(
     <div className="App">
-    <header className="App-header">
-        <br />
-        <br />
+    {/* <header className="App-header"> */}
+        {/* <br />
+        <br /> */}
         {/* <GoogleLoginButton
           onSuccess={() => {
             console.log('success');
@@ -24,7 +22,7 @@ function Main() {
           isSignedIn={true}
           scope={'https://www.googleapis.com/auth/drive.metadata.readonly'}
         /> */}
-    </header>
+    {/* </header> */}
   </div>
   );
 }
