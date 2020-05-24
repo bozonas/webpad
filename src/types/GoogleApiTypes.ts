@@ -10,3 +10,8 @@ export interface User {
   user: string,
   userDisplay: string
 }
+
+export interface GoogleFile {
+  fileName: string,
+  fileId: string,
+}

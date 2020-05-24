@@ -1,11 +1,12 @@
 import { createSlice, Dispatch } from '@reduxjs/toolkit';
 import GoogleDriveService from '../../components/google-drive/GoogleDriveService';
+import { GoogleFile } from '../../types/GoogleApiTypes';
 
 import { RootState } from '../root-reducer';
 
 type SliceState = { 
   rootFolderId: string | undefined,
-  fileList: string[] | undefined
+  fileList: GoogleFile[] | undefined
  };
 
 const initialState: SliceState = {
@@ -22,7 +23,13 @@ export const googleDriveSlice = createSlice({
     },
     setFileList: (state, action) => {
       state.fileList = action.payload
-    }
+    },
+    clearFileList: state => {
+      state.fileList = undefined
+    },
+    deleteFile: state => {
+
+    },
   },
 });
 
@@ -36,13 +43,18 @@ export const setInitDataAsync = () => (dispatch: Dispatch) => {
 };
 
 export const refreshFileList = () => (dispatch: Dispatch, getState: () => RootState ) => {
+  dispatch(clearFileList());
   const rootFolderId = getState().googleDrive.rootFolderId;
   GoogleDriveService.listFiles(rootFolderId!).then(files => {
     dispatch(setFileList(files));
   });
 }
 
-export const { setRootFolder, setFileList } = googleDriveSlice.actions;
+export const deleteFle = (file: GoogleFile) => (dispatch: Dispatch) => {
+  GoogleDriveService.deleteFile(file.fileId);
+}
+
+export const { setRootFolder, setFileList, clearFileList, deleteFile } = googleDriveSlice.actions;
 
 export const selectRootFolderId = (state: RootState) => state.googleDrive.rootFolderId!;
 export const selectFileList = (state: RootState) => state.googleDrive.fileList;

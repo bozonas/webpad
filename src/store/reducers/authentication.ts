@@ -14,10 +14,8 @@ export const authenticationSlice = createSlice({
   name: 'authentication',
   initialState,
   reducers: {
-    logIn: (state) => {
+    logIn: state => {
       state.isAuthenticated = true;
-    },
-    setRootFolder: (state, action) => {
     },
     logOut: state => {
       state.isAuthenticated = false;
@@ -30,7 +28,7 @@ export const logInAsync = () => (dispatch: Dispatch) => {
   dispatch<any>(setInitDataAsync());
 };
 
-export const { logIn, setRootFolder, logOut } = authenticationSlice.actions;
+export const { logIn, logOut } = authenticationSlice.actions;
 
 export const selectAuth = (state: RootState) => state.authentication.isAuthenticated;
 

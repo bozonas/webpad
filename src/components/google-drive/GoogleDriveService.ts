@@ -9,8 +9,6 @@ export class GoogleDriveService {
       "q": `'${rootFolderId}' in parents and trashed = false`
     });
     var files = response.result.files || [];
-    // console.log("got these files");
-    // console.log(files);
     var result = files.map(file => file.name || "");
     return result;
   }
@@ -48,6 +46,12 @@ export class GoogleDriveService {
         fields: "id"
     });
     return response.result.id;
+  }
+
+  async deleteFile(fileId: string) {
+    await gapi.client.drive.files.delete({
+      'fileId': fileId
+    });
   }
 };
 
