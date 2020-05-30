@@ -27,12 +27,12 @@ function FileList() {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [fileToDelete, setFileToDelete] = useState<GoogleFile | undefined>();
 
-  const handleListItemClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
+  const handleListItemClick = (index: number) => {
     setSelectedIndex(index);
   };
 
-  const handleDeleteFileClick = (event: React.MouseEvent<HTMLElement>) => {
-    setFileToDelete(!!!!!);
+  const handleDeleteFileClick = (file: GoogleFile) => {
+    setFileToDelete(file);
     setOpenDeleteDialog(true);
   };
 
@@ -49,17 +49,16 @@ function FileList() {
       return ("Folder is empty...");
     }
 
-
-    return (fileList.map((fileName, index) =>
+    return (fileList.map((file, index) =>
       <ListItem key={index}
         button
         selected={selectedIndex === index}
-        onClick={event => handleListItemClick(event, index)}
+        onClick={() => handleListItemClick(index)}
       >
-        <ListItemText primary={fileName} />
+        <ListItemText primary={file.fileName} />
         <ListItemSecondaryAction>
           <IconButton edge="end" aria-label="deleteFile"
-            onClick={event => handleDeleteFileClick(event)}>
+            onClick={() => handleDeleteFileClick(file)}>
             <DeleteOutlinedIcon style={{ color: "black", margin: 0 }} />
           </IconButton>
         </ListItemSecondaryAction>
@@ -71,7 +70,7 @@ function FileList() {
       <List dense >
         {buildFileList()}
       </List>
-      <DeleteConfirmDialog open={openDeleteDialog} selectedFile={fileToDelete} onClose={handleDeleteDialogClose}/>
+      <DeleteConfirmDialog open={openDeleteDialog} selectedFile={fileToDelete} onClose={handleDeleteDialogClose} />
     </>
   );
 }

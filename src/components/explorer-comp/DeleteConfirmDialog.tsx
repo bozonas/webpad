@@ -23,7 +23,6 @@ export default function DeleteConfirmDialog(props: DeleteConfirmDialogProps) {
   };
 
   const handleDelete = () => {
-    console.log(`deleting file ${selectedFile}`);
     dispatch(deleteFile(selectedFile!));
     onClose();
   }

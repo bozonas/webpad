@@ -1,15 +1,20 @@
+import { GoogleFile } from '../../types/GoogleApiTypes';
+
 const rootFolderName = "WebPad";
 
 export class GoogleDriveService {
 
-  async listFiles(rootFolderId: string) : Promise<string[] | undefined> {
+  async listFiles(rootFolderId: string) : Promise<GoogleFile[] | undefined> {
     var response = await gapi.client.drive.files.list({
       "pageSize": 10,
       "fields": "nextPageToken, files(id, name)",
       "q": `'${rootFolderId}' in parents and trashed = false`
     });
     var files = response.result.files || [];
-    var result = files.map(file => file.name || "");
+    var result = files.map(file => <GoogleFile>{
+      fileId: file.id,
+      fileName: file.name,
+    });
     return result;
   }
 
