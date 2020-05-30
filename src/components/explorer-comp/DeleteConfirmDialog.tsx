@@ -1,26 +1,30 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { GoogleFile } from '../../types/GoogleApiTypes';
 import { deleteFile } from '../../store/reducers/googleDrive';
 
 export interface DeleteConfirmDialogProps {
   open: boolean;
-  selectedFileId: string | undefined;
+  selectedFile: GoogleFile | undefined;
   onClose: () => void;
 }
 
 export default function DeleteConfirmDialog(props: DeleteConfirmDialogProps) {
-  const { open, selectedFileId, onClose } = props;
+  const { open, selectedFile, onClose } = props;
+  const dispatch = useDispatch();
 
   const handleClose = () => {
     onClose();
   };
 
   const handleDelete = () => {
-    console.log(`deleting file ${selectedFileId}`);
+    console.log(`deleting file ${selectedFile}`);
+    dispatch(deleteFile(selectedFile!));
     onClose();
   }
 

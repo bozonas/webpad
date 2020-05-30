@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
+import { GoogleFile } from '../../types/GoogleApiTypes';
 import { selectFileList } from '../../store/reducers/googleDrive';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
 
@@ -24,13 +25,14 @@ function FileList() {
   const fileList = useSelector(selectFileList);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [fileToDelete, setFileToDelete] = useState();
+  const [fileToDelete, setFileToDelete] = useState<GoogleFile | undefined>();
 
   const handleListItemClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
     setSelectedIndex(index);
   };
 
   const handleDeleteFileClick = (event: React.MouseEvent<HTMLElement>) => {
+    setFileToDelete(!!!!!);
     setOpenDeleteDialog(true);
   };
 
@@ -46,6 +48,7 @@ function FileList() {
     if (fileList.length === 0) {
       return ("Folder is empty...");
     }
+
 
     return (fileList.map((fileName, index) =>
       <ListItem key={index}
@@ -68,7 +71,7 @@ function FileList() {
       <List dense >
         {buildFileList()}
       </List>
-      <DeleteConfirmDialog open={openDeleteDialog} selectedFileId={fileToDelete} onClose={handleDeleteDialogClose}/>
+      <DeleteConfirmDialog open={openDeleteDialog} selectedFile={fileToDelete} onClose={handleDeleteDialogClose}/>
     </>
   );
 }

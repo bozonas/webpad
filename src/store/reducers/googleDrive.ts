@@ -27,8 +27,10 @@ export const googleDriveSlice = createSlice({
     clearFileList: state => {
       state.fileList = undefined
     },
-    deleteFile: state => {
-
+    removeFile: (state, action) => {
+      state.fileList!.splice(
+        state.fileList!.findIndex(file => 
+          file.fileId === action.payload.fileId), 1);
     },
   },
 });
@@ -42,7 +44,7 @@ export const setInitDataAsync = () => (dispatch: Dispatch) => {
   });
 };
 
-export const refreshFileList = () => (dispatch: Dispatch, getState: () => RootState ) => {
+export const refreshFileList = () => (dispatch: Dispatch, getState: () => RootState) => {
   dispatch(clearFileList());
   const rootFolderId = getState().googleDrive.rootFolderId;
   GoogleDriveService.listFiles(rootFolderId!).then(files => {
@@ -50,11 +52,12 @@ export const refreshFileList = () => (dispatch: Dispatch, getState: () => RootSt
   });
 }
 
-export const deleteFle = (file: GoogleFile) => (dispatch: Dispatch) => {
+export const deleteFile = (file: GoogleFile) => (dispatch: Dispatch, getState: () => RootState) => {
   GoogleDriveService.deleteFile(file.fileId);
+  dispatch(removeFile(file));
 }
 
-export const { setRootFolder, setFileList, clearFileList, deleteFile } = googleDriveSlice.actions;
+export const { setRootFolder, setFileList, clearFileList, removeFile } = googleDriveSlice.actions;
 
 export const selectRootFolderId = (state: RootState) => state.googleDrive.rootFolderId!;
 export const selectFileList = (state: RootState) => state.googleDrive.fileList;

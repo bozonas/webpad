@@ -48,7 +48,7 @@ export class GoogleDriveService {
     return response.result.id;
   }
 
-  async deleteFile(fileId: string) {
+  async deleteFile(fileId: string) : Promise<void> {
     await gapi.client.drive.files.delete({
       'fileId': fileId
     });
